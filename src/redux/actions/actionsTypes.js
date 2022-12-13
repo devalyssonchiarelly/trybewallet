@@ -1,3 +1,2 @@
-const ACTION_EMAIL = 'ACTION_EMAIL';
-
-export default ACTION_EMAIL;
+export const ACTION_EMAIL = 'ACTION_EMAIL';
+export const ACTION_CURRENCIES = 'ACTION_CURRENCIES';
