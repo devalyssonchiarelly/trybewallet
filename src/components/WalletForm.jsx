@@ -1,64 +1,115 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { requestApi } from '../redux/actions';
+import { requestApi, actionAddInfo } from '../redux/actions';
+import fetchApi from '../fetchApi';
 
 class WalletForm extends Component {
+  state = {
+    id: 0,
+    value: 0,
+    description: '',
+    currency: 'USD',
+    method: 'Dinheiro',
+    tag: 'Alimentação',
+    exchangeRates: {},
+  };
+
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(requestApi());
   }
 
+  handleChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState(({
+      [name]: value,
+    }));
+  };
+
+  handleIdValue = async () => {
+    const { dispatch } = this.props;
+    const data = await fetchApi();
+    this.setState((prevState) => ({
+      id: prevState.id,
+      exchangeRates: data,
+    }), () => {
+      dispatch(actionAddInfo(this.state));
+      this.setState((prevState) => ({
+        id: prevState.id + 1,
+        value: '',
+        description: '',
+      }));
+    });
+  };
+
   render() {
+    const { value, description, currency, method, tag } = this.state;
     const { currencies } = this.props;
     return (
       <div>
         <input
           type="number"
-          name="expense-amount"
-          id="expense-amount"
+          name="value"
+          id="value"
+          value={ value }
           data-testid="value-input"
           placeholder="Valor da despesa"
+          onChange={ this.handleChange }
         />
         <input
           type="text"
           name="description"
           id="description"
+          value={ description }
           data-testid="description-input"
           placeholder="Descrição da despesa"
+          onChange={ this.handleChange }
         />
         <select
-          name=""
-          id=""
+          name="currency"
+          id="currency"
+          value={ currency }
           data-testid="currency-input"
+          onChange={ this.handleChange }
         >
           {
             currencies.map((currencie, index) => (
               <option key={ index }>{currencie}</option>
             ))
           }
-          ;
         </select>
         <select
-          name=""
-          id=""
+          name="method"
+          id="method"
+          value={ method }
           data-testid="method-input"
+          onChange={ this.handleChange }
         >
-          <option value="">Dinheiro</option>
-          <option value="">Cartão de crédito</option>
-          <option value="">Cartão de débito</option>
+          <option>Dinheiro</option>
+          <option>Cartão de crédito</option>
+          <option>Cartão de débito</option>
         </select>
         <select
-          name=""
-          id=""
+          name="tag"
+          id="tag"
+          value={ tag }
           data-testid="tag-input"
+          onChange={ this.handleChange }
         >
-          <option value="">Alimentação</option>
-          <option value="">Lazer</option>
-          <option value="">Trabalho</option>
-          <option value="">Transporte</option>
-          <option value="">Saúde</option>
+          <option>Alimentação</option>
+          <option>Lazer</option>
+          <option>Trabalho</option>
+          <option>Transporte</option>
+          <option>Saúde</option>
         </select>
+        <button
+          type="button"
+          onClick={ this.handleIdValue }
+        >
+          Adicionar despesa
+
+        </button>
       </div>
     );
   }
