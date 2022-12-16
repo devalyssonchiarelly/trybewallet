@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { requestApi, actionAddInfo } from '../redux/actions';
+import { requestApi, actionAddInfo, actionSaveInfo } from '../redux/actions';
 import fetchApi from '../fetchApi';
 
 class WalletForm extends Component {
@@ -43,9 +43,28 @@ class WalletForm extends Component {
     });
   };
 
+  editValues = () => {
+    const { expenses, dispatch, idEdit } = this.props;
+    const { value, description, currency, method, tag } = this.state;
+    const objectInfo = expenses.map((expense) => {
+      if (expense.id === idEdit) {
+        return {
+          ...expense,
+          value,
+          description,
+          currency,
+          method,
+          tag,
+        };
+      }
+      return expense;
+    });
+    dispatch(actionSaveInfo(objectInfo));
+  };
+
   render() {
     const { value, description, currency, method, tag } = this.state;
-    const { currencies } = this.props;
+    const { currencies, editing } = this.props;
     return (
       <div>
         <input
@@ -105,10 +124,9 @@ class WalletForm extends Component {
         </select>
         <button
           type="button"
-          onClick={ this.handleIdValue }
+          onClick={ (editing ? this.editValues : this.handleIdValue) }
         >
-          Adicionar despesa
-
+          {editing ? 'Editar despesa' : 'Adicionar despesa'}
         </button>
       </div>
     );
@@ -117,11 +135,17 @@ class WalletForm extends Component {
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
+  expenses: state.wallet.expenses,
+  editing: state.wallet.editor,
+  idEdit: state.wallet.idToEdit,
 });
 
 WalletForm.propTypes = {
   dispatch: PropTypes.func.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
+  expenses: PropTypes.arrayOf().isRequired,
+  idEdit: PropTypes.number.isRequired,
+  editing: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);

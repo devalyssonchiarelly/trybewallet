@@ -1,5 +1,5 @@
 import {
-  ACTION_CURRENCIES, ACTION_ADDINFO, ACTION_DELETE,
+  ACTION_CURRENCIES, ACTION_ADDINFO, ACTION_DELETE, ACTION_EDIT, ACTION_SAVE,
 } from '../actions/actionsTypes';
 
 const INITIAL_STATE = {
@@ -20,6 +20,18 @@ const wallet = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       expenses: [...state.expenses, action.payload],
+    };
+  case ACTION_EDIT:
+    return {
+      ...state,
+      idToEdit: action.payload,
+      editor: true,
+    };
+  case ACTION_SAVE:
+    return {
+      ...state,
+      expenses: action.payload,
+      editor: false,
     };
   case ACTION_DELETE:
     return {

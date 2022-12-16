@@ -1,5 +1,6 @@
 import {
   ACTION_EMAIL, ACTION_CURRENCIES, ACTION_ADDINFO, ACTION_DELETE,
+  ACTION_EDIT, ACTION_SAVE,
 } from './actionsTypes';
 
 export const actionEmail = (email) => ({
@@ -19,6 +20,16 @@ const actionAddInfos = (info) => ({
 
 export const actionDeleteInfo = (info) => ({
   type: ACTION_DELETE,
+  payload: info,
+});
+
+export const actionEditInfo = (info) => ({
+  type: ACTION_EDIT,
+  payload: info,
+});
+
+export const actionSaveInfo = (info) => ({
+  type: ACTION_SAVE,
   payload: info,
 });
 

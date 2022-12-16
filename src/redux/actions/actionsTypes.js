@@ -2,3 +2,5 @@ export const ACTION_EMAIL = 'ACTION_EMAIL';
 export const ACTION_CURRENCIES = 'ACTION_CURRENCIES';
 export const ACTION_ADDINFO = 'ACTION_ADDINFO';
 export const ACTION_DELETE = 'ACTION_DELETE';
+export const ACTION_EDIT = 'ACTION_EDIT';
+export const ACTION_SAVE = 'ACTION_SAVE';

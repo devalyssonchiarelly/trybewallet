@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { actionDeleteInfo } from '../redux/actions';
+import { actionDeleteInfo, actionEditInfo } from '../redux/actions';
 
 class Table extends Component {
   handleDeleteButton = (id) => {
     const { expenses, dispatch } = this.props;
     const newObject = expenses.filter((expense) => expense.id !== id);
     dispatch(actionDeleteInfo(newObject));
+  };
+
+  handleEditButton = (id) => {
+    const { expenses, dispatch } = this.props;
+    const newObject = expenses.find((expense) => expense.id === id);
+    dispatch(actionEditInfo(newObject.id));
   };
 
   render() {
@@ -42,6 +48,14 @@ class Table extends Component {
                 <td>{parseFloat(exchangeRates[currency].ask * value).toFixed(2)}</td>
                 <td>Real</td>
                 <td>
+                  <button
+                    type="button"
+                    data-testid="edit-btn"
+                    onClick={ () => this.handleEditButton(id) }
+                  >
+                    Editar
+
+                  </button>
                   <button
                     type="button"
                     data-testid="delete-btn"
